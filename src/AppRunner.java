@@ -39,7 +39,6 @@ public class AppRunner {
         showProducts(products);
 
         choicePaymentMethod();
-
     }
 
     private UniversalArray<Product> getAllowedProducts(PaymentMethod paymentMethod) {
@@ -101,7 +100,6 @@ public class AppRunner {
     private void print(String msg) {
         System.out.println(msg);
     }
-
     private void choicePaymentMethod() {
         print("Выберите способ оплаты: \n1 - Оплата монетами \n2 - Оплата банкнотами");
         int actionNumber = 0;
