@@ -9,7 +9,8 @@ public class AppRunner {
 
     private final UniversalArray<Product> products = new UniversalArrayImpl<>();
 
-    private final CoinAcceptor coinAcceptor;
+    private final PaymentMethod coinAcceptor;
+    private final PaymentMethod moneyReceiver;
 
     private static boolean isExit = false;
 
@@ -23,6 +24,7 @@ public class AppRunner {
                 new Pistachios(ActionLetter.G, 130)
         });
         coinAcceptor = new CoinAcceptor(100);
+        moneyReceiver = new MoneyReceiver(200);
     }
 
     public static void run() {
@@ -44,30 +46,30 @@ public class AppRunner {
 
     }
 
-    private UniversalArray<Product> getAllowedProducts() {
+    private UniversalArray<Product> getAllowedProducts(PaymentMethod paymentMethod) {
         UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
         for (int i = 0; i < products.size(); i++) {
-            if (coinAcceptor.getAmount() >= products.get(i).getPrice()) {
+            if (paymentMethod.getAmount() >= products.get(i).getPrice()) {
                 allowProducts.add(products.get(i));
             }
         }
         return allowProducts;
     }
 
-    private void chooseAction(UniversalArray<Product> products) {
+    private void chooseAction(UniversalArray<Product> products, PaymentMethod paymentMethod) {
         print(" a - Пополнить баланс");
         showActions(products);
         print(" h - Выйти");
         String action = fromConsole().substring(0, 1);
         if ("a".equalsIgnoreCase(action)) {
-            coinAcceptor.setAmount(coinAcceptor.getAmount() + 10);
+            paymentMethod.setAmount(paymentMethod.getAmount() + 10);
             print("Вы пополнили баланс на 10");
             return;
         }
         try {
             for (int i = 0; i < products.size(); i++) {
                 if (products.get(i).getActionLetter().equals(ActionLetter.valueOf(action.toUpperCase()))) {
-                    coinAcceptor.setAmount(coinAcceptor.getAmount() - products.get(i).getPrice());
+                    paymentMethod.setAmount(paymentMethod.getAmount() - products.get(i).getPrice());
                     print("Вы купили " + products.get(i).getName());
                     break;
                 }
@@ -77,7 +79,7 @@ public class AppRunner {
                 isExit = true;
             } else {
                 print("Недопустимая буква. Попрбуйте еще раз.");
-                chooseAction(products);
+                chooseAction(products, paymentMethod);
             }
         }
 
