@@ -38,11 +38,7 @@ public class AppRunner {
         print("В автомате доступны:");
         showProducts(products);
 
-        print("Монет на сумму: " + coinAcceptor.getAmount());
-
-        UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
-        allowProducts.addAll(getAllowedProducts().toArray());
-        chooseAction(allowProducts);
+        choicePaymentMethod();
 
     }
 
@@ -104,5 +100,38 @@ public class AppRunner {
 
     private void print(String msg) {
         System.out.println(msg);
+    }
+
+    private void choicePaymentMethod() {
+        print("Выберите способ оплаты: \n1 - Оплата монетами \n2 - Оплата банкнотами");
+        int actionNumber = 0;
+        try {
+            actionNumber = Integer.parseInt(fromConsole());
+        } catch (NumberFormatException e){
+            print("Некорректный символ, введите снова");
+            choicePaymentMethod();
+        }
+
+        PaymentMethod paymentMethod;
+        switch (actionNumber){
+            case 1:
+                print("Монет на сумму: " + coinAcceptor.getAmount());
+
+                paymentMethod = coinAcceptor;
+                UniversalArray<Product> allowProducts = new UniversalArrayImpl<>();
+                allowProducts.addAll(getAllowedProducts(paymentMethod).toArray());
+                chooseAction(allowProducts, paymentMethod);
+                break;
+            case 2:
+                print("Банкнот на сумму: " + moneyReceiver.getAmount());
+
+                paymentMethod = moneyReceiver;
+                UniversalArray<Product> allowProducts2 = new UniversalArrayImpl<>();
+                allowProducts2.addAll(getAllowedProducts(paymentMethod).toArray());
+                chooseAction(allowProducts2, paymentMethod);
+                break;
+            default:
+                print("Выбранного продукта не существует!");
+        }
     }
 }
