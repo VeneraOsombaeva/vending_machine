@@ -1,0 +1,26 @@
+$ git clone https://github.com/VeneraOsombaeva/vending_machine.git
+
+$ git init
+
+$ git remote add origin https://github.com/VeneraOsombaeva/vending_machine.git
+
+$ cd vending_machine
+
+$ git branch home_work_25_2
+
+$ git checkout home_work_25_2
+
+$ git status
+
+$ git pull origin master
+
+$ git push origin master
+
+$ git checkout master
+
+$ git merge home_work_25_2
+
+$ git add commands.txt
+
+$ git status
+
